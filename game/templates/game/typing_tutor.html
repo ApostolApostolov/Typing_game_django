@@ -1,0 +1,32 @@
+{% extends "game/base.html"%}
+
+
+{% block content%}
+<h2>Typing game</h2>
+
+<div class="timer">
+    <span id="timer-minutes">00</span>:
+    <span id="timer-seconds">00</span>
+</div>
+
+
+<div class="content-section">
+    <p id = "current-text" class="current-exercise"> Some random textD</p>
+   
+   
+    <!--<p id = "second-text" class="rest-exercises">Second random text</p>
+    <p id = "third-text" class="rest-exercises">Third random text</p>
+
+     simply copy the text for the next one and that is , keep the id's and toggle 
+    the clases
+    this should be in some kind of a loop which reverse them after every 3
+    -->
+</div>
+
+
+<div class="input-group input-group-lg pt-2">
+    <textarea  id='quoteInput' class="form-control" aria-label="With textarea" ></textarea>
+</div>
+
+<a class="btn btn-primary btn-sm mt-1 mb-1" onclick="reset()" href="#">Reset</a>
+{%endblock content%}
