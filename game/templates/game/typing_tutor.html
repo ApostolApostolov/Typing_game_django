@@ -1,8 +1,22 @@
 {% extends "game/base.html"%}
 
+<div class="col-md-4">
+    <div class="content-section">
+        <h3>Our Sidebar</h3>
+        <p class='text-muted'>You can put any information here you'd like.
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-light">Latest Posts</li>
+            <li class="list-group-item list-group-item-light">Announcements</li>
+            <li class="list-group-item list-group-item-light">Calendars</li>
+            <li class="list-group-item list-group-item-light">etc</li>
+        </ul>
+        </p>
+    </div>
+    </div>
 
 {% block content%}
 <h2>Typing game</h2>
+
 
 <div class="timer">
     <span id="timer-minutes">00</span>:
@@ -10,8 +24,9 @@
 </div>
 
 
+
 <div class="content-section">
-    <p id = "current-text" class="current-exercise"> Some random textD</p>
+    <p id = "current-text" class="current-exercise" data-placeholder="Kiro breika"> Some random textD</p>
    
    
     <!--<p id = "second-text" class="rest-exercises">Second random text</p>
@@ -29,4 +44,6 @@
 </div>
 
 <a class="btn btn-primary btn-sm mt-1 mb-1" onclick="reset()" href="#">Reset</a>
+
+
 {%endblock content%}
