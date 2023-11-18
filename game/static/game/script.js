@@ -6,7 +6,7 @@ let current_quote = document.getElementById("current-text");
 let timer_seconds = document.getElementById("timer-seconds");
 let timer_minutes = document.getElementById("timer-minutes")
 var timer_on = false
-let total_mistakes = 0
+let mistakes = 0
 
 var indexVariable = 0
 
@@ -53,6 +53,10 @@ quoteInputArea.addEventListener('input', function(event) {
         timer_on = true
         timer_start();
     }
+
+
+
+
     const arrayValue = quoteInputArea.value.split('');
 
     if (arrayValue.length === 0){
@@ -64,91 +68,63 @@ quoteInputArea.addEventListener('input', function(event) {
 
     const arrayQuote = current_quote.querySelectorAll('span');
     const letter_in_quote = arrayQuote[arrayValue.length - 1]
-    let correct = false
+
 
     indexVariable = arrayValue.length - 1
     character = arrayValue[arrayValue.length - 1]
-
-
-    console.log(character + " character")
-    console.log(indexVariable + " index")
-    console.log(arrayValue)
-    console.log(arrayValue.length + " length")
-    console.log((arrayValue.length - 1) + " index")
-    console.log((arrayValue[arrayValue.length - 1]) + " character index")
-    console.log (" ")
-    
-   
 
     
     if (character == null){ 
         letter_in_quote.classList.remove('correct')
         letter_in_quote.classList.remove('incorrect')
-        correct = false
+    }
+ 
+    else if (character === letter_in_quote.innerHTML){
 
-    }else if (character === letter_in_quote.innerHTML){
-        letter_in_quote.classList.add("correct")
-        letter_in_quote.classList.remove("incorrect")
+        if (character === " "){
+            letter_in_quote.classList.add("correct-space")
+            letter_in_quote.classList.remove("incorrect-space")
+        }
+        else{
+            letter_in_quote.classList.add("correct")
+            letter_in_quote.classList.remove("incorrect")
+        }
+
 
     }else {
-        letter_in_quote.classList.add("incorrect")
-        letter_in_quote.classList.remove("correct")
-        correct = false
-    }
-    
 
-
-
-
-})
-
-// DELETION OF INPUT
-quoteInputArea.addEventListener('keydown',function(event) {
-
-
-
-
-
-})
-
-
-function backup(){
-    arrayQuote.forEach((characterSpan, index) => {
-
-        console.log(mistakes);
-
-        character = arrayValue[index]
-
-        if (character == null){ 
-            characterSpan.classList.remove('correct')
-            characterSpan.classList.remove('incorrect')
-            correct = false
-
-        }else if (character === characterSpan.innerText){
-            characterSpan.classList.add("correct")
-            characterSpan.classList.remove("incorrect")
-
-        }else {
-            characterSpan.classList.add("incorrect")
-            characterSpan.classList.remove("correct")
-            correct = false
+        if (letter_in_quote.innerHTML === " "){
+            letter_in_quote.classList.remove("correct-space")
+            letter_in_quote.classList.add("incorrect-space")
         }
-    })
+        else{
+            letter_in_quote.classList.add("incorrect")
+         letter_in_quote.classList.remove("correct")
+        }
+        
 
+    }
 
+    //check array size if the last written char is . then get new quote
+    
+    if (arrayQuote.length === arrayValue.length
+        && character === "."){
+        console.log("HERE WE ARE")
+        mistakes =  mistakes + current_quote.querySelectorAll('.incorrect').length;
 
-    if (correct) {
-        //let wpm = Math.round(((charIndex - mistakes) / 5) / (maxTime - timeLeft) * 60);
+        console.log(mistakes +" MIstakes")
+        // get the span all the mistakes
+
         reset()
     }
-}
 
+})
 
 function reset(){
     randomQuote()
     document.getElementById('quoteInput').value = ''
-    console.log(timer);
     document.getElementById('quoteInput').disabled = false
+    timer_on = false
 }
 
 
@@ -176,16 +152,21 @@ function timer_start(){
        
         if (count === 0){
             clearInterval(timer)
+            mistakes =  mistakes + current_quote.querySelectorAll('.incorrect').length + current_quote.querySelectorAll('.incorrect-space').length;
             console.log("is over")
-            document.getElementById('quoteInput').disabled = false
+            document.getElementById('quoteInput').disabled = true
+            document.getElementById("information-mistakes").innerHTML= "Mistakes - " + mistakes
+
             
         }
-    },100) 
+    },1000) 
 }
 
+
+// Prevent use of arrows in the input area
 window.addEventListener("keydown", function (e) {
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
-    e.preventDefault();
+        e.preventDefault();
     }
     }, false);
 
