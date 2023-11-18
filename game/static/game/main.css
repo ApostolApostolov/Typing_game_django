@@ -99,12 +99,20 @@ body {
 
   .correct{
     color: rgb(0, 255, 0);
-    font-size: 2.5rem;
+    font-size: 2.5rem; 
   }
 
   .incorrect{
     color: red;
     font-size: 2.5rem;
+  }
+
+  .correct-space{
+    background-color: rgb(0, 255, 0);
+  }
+
+  .incorrect-space {
+    background-color: red;
   }
 /* Typing tutor color , visual  response colours */
 
