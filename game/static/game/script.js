@@ -1,17 +1,14 @@
 
-let string_index = 0;
-
 let quoteInputArea = document.getElementById('quoteInput');
 let current_quote = document.getElementById("current-text");
+
 let timer_seconds = document.getElementById("timer-seconds");
 let timer_minutes = document.getElementById("timer-minutes")
 var timer_on = false
 let mistakes = 0
 
-var indexVariable = 0
+var indexVariable = 0  //Keeps track of the last written character in the input area
 
-
-let charIndex = 0
 
 
 
@@ -25,10 +22,11 @@ async function randomQuote() {
     //separate the quote into spans 
     let current_quote = document.getElementById("current-text").innerText
     document.getElementById("current-text").innerText = ""
+
     current_quote.split('').forEach(character =>{
-    const characterSpan = document.createElement('span')
-    characterSpan.innerText = character
-    document.getElementById("current-text").appendChild(characterSpan)
+        const characterSpan = document.createElement('span')
+        characterSpan.innerText = character
+        document.getElementById("current-text").appendChild(characterSpan)
     });
     
   }
@@ -37,15 +35,17 @@ async function randomQuote() {
 quoteInputArea.addEventListener('input', function(event) {
     const key = event.key;
 
+    // To not count the arrow keys as input 
     if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'ArrowUp' || key ==='ArrowDown'){
         event.preventDefault();
         return null
     }
-    
-    if (key === "Backspace" || key === "Delete"){
+
+    if (event.inputType === "deleteContentBackward"){
         if (indexVariable === 0) return 
+
         indexVariable--;
-        console.log(indexVariable)
+        remove_assigned_classes_in_typing_game()
         return null
     }
 
@@ -55,31 +55,20 @@ quoteInputArea.addEventListener('input', function(event) {
     }
 
 
-
-
     const arrayValue = quoteInputArea.value.split('');
 
+    // in case of deleting the whole text to reset it 
     if (arrayValue.length === 0){
         indexVariable = 0;
     } 
 
 
-    
-
     const arrayQuote = current_quote.querySelectorAll('span');
     const letter_in_quote = arrayQuote[arrayValue.length - 1]
-
-
     indexVariable = arrayValue.length - 1
     character = arrayValue[arrayValue.length - 1]
-
     
-    if (character == null){ 
-        letter_in_quote.classList.remove('correct')
-        letter_in_quote.classList.remove('incorrect')
-    }
- 
-    else if (character === letter_in_quote.innerHTML){
+    if (character === letter_in_quote.innerHTML){
 
         if (character === " "){
             letter_in_quote.classList.add("correct-space")
@@ -89,7 +78,6 @@ quoteInputArea.addEventListener('input', function(event) {
             letter_in_quote.classList.add("correct")
             letter_in_quote.classList.remove("incorrect")
         }
-
 
     }else {
 
@@ -101,42 +89,40 @@ quoteInputArea.addEventListener('input', function(event) {
             letter_in_quote.classList.add("incorrect")
          letter_in_quote.classList.remove("correct")
         }
-        
 
     }
 
+
     //check array size if the last written char is . then get new quote
-    
+    //currently all quotes end on ".", the API provides the like this
     if (arrayQuote.length === arrayValue.length
         && character === "."){
-        console.log("HERE WE ARE")
         mistakes =  mistakes + current_quote.querySelectorAll('.incorrect').length;
-
-        console.log(mistakes +" MIstakes")
-        // get the span all the mistakes
-
         reset()
     }
 
 })
 
+
 function reset(){
     randomQuote()
     document.getElementById('quoteInput').value = ''
     document.getElementById('quoteInput').disabled = false
-    timer_on = false
+    document.getElementById("information-result").style.visibility  = "hidden";
+    quoteInputArea.focus();
 }
+//timer_on = false
 
 
 
 function timer_start(){
-    let count = 20;
+    let count = 30; // debug value change upon completion
     const timer = setInterval(function(){
         count--;
     
         if (count > 60){
             minutes = Math.floor(count / 60)
-            timer_minutes.innerHTML = "0" +minutes
+            timer_minutes.innerHTML = "0" + minutes
             seconds = count % 60
             timer_seconds.innerHTML = count % 60
         }
@@ -152,12 +138,17 @@ function timer_start(){
        
         if (count === 0){
             clearInterval(timer)
+            document.getElementById("information-result").style.visibility  = "visible";
             mistakes =  mistakes + current_quote.querySelectorAll('.incorrect').length + current_quote.querySelectorAll('.incorrect-space').length;
-            console.log("is over")
             document.getElementById('quoteInput').disabled = true
             document.getElementById("information-mistakes").innerHTML= "Mistakes - " + mistakes
+            document.getElementById("WPM").innerHTML = (quoteInputArea.value.length / 5 / 0.5) .toFixed(2) + " wpm"
 
-            
+            accuracy = Math.round(((quoteInputArea.value.length - mistakes) / (quoteInputArea.value.length)) * 100)
+            if (accuracy <=0  || isNaN(accuracy)){
+                accuracy = 0
+            }
+            document.getElementById("accuracy").innerHTML = "Accuracy - " + accuracy + "%";
         }
     },1000) 
 }
@@ -171,7 +162,20 @@ window.addEventListener("keydown", function (e) {
     }, false);
 
 
+function remove_assigned_classes_in_typing_game(){
+    const arrayValue = quoteInputArea.value.split('');
+    const arrayQuote = current_quote.querySelectorAll('span');
+    const letter_in_quote = arrayQuote[arrayValue.length]
 
+    arrayQuote.forEach((characterSpan, index) => {
+
+        character = arrayValue[index]
+        letter_in_quote.classList.remove("correct")
+        letter_in_quote.classList.remove('incorrect')
+        letter_in_quote.classList.remove('correct-space')
+        letter_in_quote.classList.remove('incorrect-space')
+    });
+}
 
 
 randomQuote()
