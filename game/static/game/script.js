@@ -6,6 +6,7 @@ let timer_seconds = document.getElementById("timer-seconds");
 let timer_minutes = document.getElementById("timer-minutes")
 var timer_on = false
 let mistakes = 0
+let total_length = 0 // Keep track of all written characters in the input area
 
 var indexVariable = 0  //Keeps track of the last written character in the input area
 
@@ -98,7 +99,8 @@ quoteInputArea.addEventListener('input', function(event) {
     if (arrayQuote.length === arrayValue.length
         && character === "."){
         mistakes =  mistakes + current_quote.querySelectorAll('.incorrect').length;
-        reset()
+        total_length = total_length + quoteInputArea.value.length
+        randomQuote()
     }
 
 })
@@ -106,12 +108,12 @@ quoteInputArea.addEventListener('input', function(event) {
 
 function reset(){
     randomQuote()
+    timer_on = false
     document.getElementById('quoteInput').value = ''
     document.getElementById('quoteInput').disabled = false
     document.getElementById("information-result").style.visibility  = "hidden";
     quoteInputArea.focus();
 }
-//timer_on = false
 
 
 
@@ -144,7 +146,9 @@ function timer_start(){
             document.getElementById("information-mistakes").innerHTML= "Mistakes - " + mistakes
             document.getElementById("WPM").innerHTML = (quoteInputArea.value.length / 5 / 0.5) .toFixed(2) + " wpm"
 
-            accuracy = Math.round(((quoteInputArea.value.length - mistakes) / (quoteInputArea.value.length)) * 100)
+            accuracy = Math.round(((total_length - mistakes) / (total_length)) * 100)
+
+
             if (accuracy <=0  || isNaN(accuracy)){
                 accuracy = 0
             }
