@@ -1,0 +1,29 @@
+{% extends "game/base.html"%}
+
+{% block content%}
+<div class="col-md-8 h-100 d-flex align-items-center justify-content-center">
+  <table>
+    <thead>
+        <th></th>
+        <th></th>
+        <th>Username</th>
+        <th>WPM</th>
+        <th>ago</th>
+    </thead>
+  
+    <tbody>
+        {% for result in wordPerMinute %}
+        <tr>
+            <td >{{ forloop.counter}}.</td>
+            <td>Random</td>
+            <td>{{result.player}}</td>
+            <td>{{result.wpm}}</td>
+            <td>{{result.date_posted}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+{%endblock content%}
