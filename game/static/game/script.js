@@ -98,9 +98,10 @@ quoteInputArea.addEventListener('input', function(event) {
     //currently all quotes end on ".", the API provides the like this
     if (arrayQuote.length === arrayValue.length
         && character === "."){
-        mistakes =  mistakes + current_quote.querySelectorAll('.incorrect').length;
-        total_length = total_length + quoteInputArea.value.length
+            mistakes =  mistakes + current_quote.querySelectorAll('.incorrect').length + current_quote.querySelectorAll('.incorrect-space').length;
+            total_length = total_length + quoteInputArea.value.length
         randomQuote()
+        document.getElementById('quoteInput').value = ''
     }
 
 })
@@ -140,8 +141,11 @@ function timer_start(){
        
         if (count === 0){
             clearInterval(timer)
-            document.getElementById("information-result").style.visibility  = "visible";
+
             mistakes =  mistakes + current_quote.querySelectorAll('.incorrect').length + current_quote.querySelectorAll('.incorrect-space').length;
+            total_length = total_length + quoteInputArea.value.length
+
+            document.getElementById("information-result").style.visibility  = "visible";
             document.getElementById('quoteInput').disabled = true
             document.getElementById("information-mistakes").innerHTML= "Mistakes - " + mistakes
             document.getElementById("WPM").innerHTML = (quoteInputArea.value.length / 5 / 0.5) .toFixed(2) + " wpm"
